@@ -28,8 +28,8 @@ def get_toggl_post_slack():
             time_entries[time_entry['description']] = time_entry['dur']/1000
 
     for description, duration in time_entries.iteritems():
-        task_time_today = time.strftime('%H:%M:%S', time.gmtime(duration))
-        slack_text.append('Description: %s\nTime tracked: %s\n' % (description, task_time_today))
+        task_time_today = time.strftime('%-Hh %-Mm', time.gmtime(duration))
+        slack_text.append('%s\nTime tracked: %s\n' % (description, task_time_today))
 
     requests.post(
         'https://hooks.slack.com/services/%s'

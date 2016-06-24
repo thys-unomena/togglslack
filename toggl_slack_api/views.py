@@ -11,7 +11,7 @@ def index(request):
     if request.method == 'POST':
         if request.POST['token'] == settings.SLACK_OUTGOING_HOOK_TOKEN:
             response = JsonResponse({
-                "text": "African or European?"
+                "text": "Succes! :apple:"
             })
             get_toggl_post_slack()
             return response
