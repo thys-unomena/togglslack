@@ -22,14 +22,27 @@ def get_toggl_post_slack():
 
     time_entries = {}
     for time_entry in json_dict['data']:
-        if time_entry['description'] in time_entries:
-            time_entries[time_entry['description']] += time_entry['dur']/1000
+        time_entry_unique_key = '%s_%s_%s' % (time_entry['description'], time_entry['client'], time_entry['project'])
+        if time_entry_unique_key in time_entries:
+            time_entries[time_entry_unique_key]['duration'] += time_entry['dur']/1000
         else:
-            time_entries[time_entry['description']] = time_entry['dur']/1000
+            time_entries[time_entry_unique_key] = {
+                'description': time_entry['description'],
+                'duration': time_entry['dur']/1000,
+                'client': time_entry['client'],
+                'project': time_entry['project']
+            }
 
-    for description, duration in time_entries.iteritems():
-        task_time_today = time.strftime('%-Hh %-Mm', time.gmtime(duration))
-        slack_text.append('%s\nTime tracked: %s\n' % (description, task_time_today))
+    for key, info in time_entries.iteritems():
+        task_time_today = time.strftime('%-Hh %-Mm', time.gmtime(info['duration']))
+        slack_text.append(
+            '%s\n%s\n%s\n%s\n' % (
+                info['description'],
+                task_time_today,
+                info['client'],
+                info['project']
+            )
+        )
 
     requests.post(
         'https://hooks.slack.com/services/%s'
