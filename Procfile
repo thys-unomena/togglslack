@@ -1,1 +1,1 @@
-web: gunicorn wedding_site.wsgi --log-file -
+web: gunicorn togglslack.wsgi --log-file -
