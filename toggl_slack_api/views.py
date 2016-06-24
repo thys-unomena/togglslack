@@ -15,4 +15,7 @@ def index(request):
             })
             get_toggl_post_slack()
             return response
-    return HttpResponse('Unauthorized', status=401)
+        return HttpResponse('Unauthorized', status=401)
+
+    else:
+        return JsonResponse({"text": "You are here"})
